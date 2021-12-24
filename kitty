@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>西北的小礼物</title>
+		<style type="text/css">
+			h3 {
+				text-align: center;
+			}
+
+			body {
+				overflow: hidden;
+			}
+
+			* {
+				-webkit-user-select: none;
+			}
+		</style>
+	</head>
+	<body>
+		<h3 id="target">小黑猫</h3>
+	</body>
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+	<script src="l2dwidget.min.js"></script>
+	<script>
+		let block = 'block/assets/block.model.json';
+		let white = 'white/assets/white.model.json';
+		let state = true
+		let faist = true
+
+		$("#target").on({
+			touchstart: function(e) {
+				// 长按事件触发    
+				timeOutEvent = setTimeout(function() {
+					timeOutEvent = 0;
+					if (faist) {
+						alert('送你一条白色的猫');
+						faist = false
+					}
+					show(state ? white :  block)
+					$("#target").html('小白猫')
+					state = !state
+				}, 400);
+			},
+			touchmove: function() {
+				clearTimeout(timeOutEvent);
+				timeOutEvent = 0;
+			},
+			touchend: function() {
+				clearTimeout(timeOutEvent);
+				if (timeOutEvent != 0) {
+					// 点击事件    
+					if (faist) {
+						alert('喜欢吗，喜欢就长按我试试！');
+					}
+					$("#target").html('小黑猫')
+				}
+				return false;
+			},
+		})
+
+		function show(color) {
+			config.model.jsonPath = color;
+			L2Dwidget.init(config)
+		}
+		// 配置文件官方API: https://l2dwidget.js.org/docs/class/src/index.js~L2Dwidget.html#instance-method-init
+		let config = {
+			model: {
+				jsonPath: '', // xxx.model.json 的路径
+			},
+			display: {
+				superSample: 1, // 超采样等级
+				width: 400, // canvas的宽度
+				height: 400, // canvas的高度
+				position: 'left', // 显示位置：左或右
+				hOffset: 20, // canvas水平偏移
+				vOffset: 0, // canvas垂直偏移
+			},
+			mobile: {
+				show: true, // 是否在移动设备上显示
+				scale: 1, // 移动设备上的缩放
+				motion: true, // 移动设备是否开启重力感应
+			},
+			react: {
+				opacityDefault: 1, // 默认透明度
+				opacityOnHover: 1, // 鼠标移上透明度
+			},
+		}
+		show(block)
+	</script>
+</html>
